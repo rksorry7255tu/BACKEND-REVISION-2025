@@ -9,6 +9,7 @@ import {
   currentUser,
   changeCurrentPassword,
   updateUsercoverImage,
+  getUserChannelProfile,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -27,29 +28,32 @@ router.route("/register").post(
     },
   ]),
   registerUser
-);
-router.route("/login").post(loginUser);
-router.route("/logout").post(verifyJWT, logoutUser);
-router.route("/refresh-token").post(refreshAccessToken);
-router.route("/changeCurrentPassword").post(verifyJWT, changeCurrentPassword);
-router.route("/currentUser").post(verifyJWT, currentUser);
-router.route("/updateAccountDetails").post(verifyJWT, updateAccountDetails);
-router.route("/updateUserAvatar").post(
+); //completed
+router.route("/login").post(loginUser); //completed
+router.route("/logout").post(verifyJWT, logoutUser); //completed
+router.route("/refresh-token").post(refreshAccessToken); //completed
+router.route("/changeCurrentPassword").post(verifyJWT, changeCurrentPassword); //completed
+router.route("/currentUser").get(verifyJWT, currentUser); //completed
+router.route("/updateAccountDetails").post(verifyJWT, updateAccountDetails); //complete
+router.route("/updateUserAvatar").patch(
   upload.fields([
     {
       name: "avatar",
       maxCount: 1,
     },
   ]),
+  verifyJWT,
   updateUserAvatar
-);
-router.route("/updateUserCoverImage").post(
+); //complete
+router.route("/updateUserCoverImage").patch(
   upload.fields([
     {
       name: "coverImage",
       maxCount: 1,
     },
   ]),
+  verifyJWT,
   updateUsercoverImage
-);
+); //complete
+router.route("/getUserChannelProfile").get(getUserChannelProfile);
 export default router;
