@@ -293,7 +293,7 @@ const updateUsercoverImage = asyncHandler(async (req, res) => {
 
 // test the routing
 const getUserChannelProfile = asyncHandler(async (req, res) => {
-  const { username } = req.params;
+  const { username } = req.params; //but use req.params
   // console.log(username);
 
   if (!username?.trim()) {
@@ -351,21 +351,23 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     },
   ]);
 
-  console.log(channel);
+  // console.log(channel);
   if (!channel?.length) {
     throw new ApiError(404, "Channel not available||does not exist");
   }
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "user channel fetched successfully"));
+    .json(
+      new ApiResponse(200, channel[0], "user channel fetched successfully")
+    );
 });
 
 const getWatchHistory = asyncHandler(async (req, res) => {
   const user = await User.aggregate([
     {
       $match: {
-        _id: new mongoose.Type.ObjectId(req.user._id),
+        _id: new mongoose.Types.ObjectId(req.user._id),
       },
     },
     {
@@ -425,4 +427,5 @@ export {
   changeCurrentPassword,
   updateUsercoverImage,
   getUserChannelProfile,
+  getWatchHistory,
 };
